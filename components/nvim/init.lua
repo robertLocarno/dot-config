@@ -19,6 +19,13 @@ vim.opt.signcolumn = 'yes'
 -- vim.diagnostic.config({ virtual_lines = true })
 vim.diagnostic.config({ virtual_text = true })
 
+-- Enable autoread and set up checking triggers
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+	command = "if mode() != 'c' | checktime | endif",
+	pattern = "*",
+})
+
 -- Clipboard
 vim.schedule(function()
 	vim.opt.clipboard = 'unnamedplus'
@@ -60,6 +67,7 @@ vim.keymap.set('n', '<leader>w', '<cmd>silent! write<cr>', {desc = 'Save'})
 
 -- Bind File Explorer
 vim.keymap.set('n', '<leader>f', '<cmd>NvimTreeFocus<cr>')
+vim.keymap.set('n', '<leader>F', '<cmd>NvimTreeFindFile<cr>')
 
 ---- Bind global copy and paste
 vim.keymap.set({'n', 'x'}, 'gy', '"+y')
@@ -97,6 +105,9 @@ vim.keymap.set('i', '<C-h>', '<Left>')
 vim.keymap.set('i', '<C-l>', '<Right>')
 vim.keymap.set('i', '<C-j>', '<Down>')
 vim.keymap.set('i', '<C-k>', '<Up>')
+
+-- keybind to print relative path (Print Relative)
+vim.keymap.set('n', '<leader>pr', '<cmd>RelativePath<CR>')
 
 ------------------------
 -- Basic Autocommands --
@@ -189,6 +200,7 @@ vim.cmd.colorscheme('tokyonight')
 -- vim.cmd.colorscheme('dayfox')
 
 -- User Commands
+vim.api.nvim_create_user_command('RelativePath', function() print(vim.fn.expand('%:.')) end, {})
 vim.api.nvim_create_user_command('ReloadConfig', 'source $MYVIMRC', {})
 vim.api.nvim_create_user_command('Dark', 'colorscheme tokyonight-night', {})
 vim.api.nvim_create_user_command('Light', 'colorscheme dayfox', {})
