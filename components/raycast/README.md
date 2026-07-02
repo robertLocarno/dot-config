@@ -6,3 +6,5 @@ Repository for Raycast extensions.
 
 Install raycast, register extension.
 
+Go into Raycast settings, register a new extension as a script directory pointing to `./scripts/`.
+
