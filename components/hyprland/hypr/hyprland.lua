@@ -16,6 +16,16 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	-- enable clipse for copy / paste
 	hl.exec_cmd("clipse -listen")
+	-- Start wallpaper engine
+	hl.exec_cmd("hyprpaper")
+end)
+
+-- Notify config was reloaded
+hl.on("config.reloaded", function()
+	hl.notification.create({
+		text = "Config Reloaded",
+		timeout = 1000,
+	})
 end)
 
 -- Use clipse for clipboard logic
@@ -38,14 +48,14 @@ hl.bind(
 hl.monitor({
 	output   = "dp-2",
 	mode     = "preferred",
-	position = "auto",
+	position = "0x0",
 	scale    = "auto",
 })
 
 hl.monitor({
 	output   = "hdmi-a-1",
 	mode     = "preferred",
-	position = "auto",
+	position = "auto-center-right",
 	scale    = "auto",
 })
 
@@ -93,6 +103,9 @@ for i = 1, 10 do
 	hl.bind(mainMod .. " + SHIFT + " .. key, 	hl.dsp.window.move({ workspace = i }))
 end
 
+-- Move workspace to next monitor
+hl.bind(mainMod .. " + TAB", hl.dsp.workspace.move({ monitor = "+1" }))
+
 -- Submap escape
 hl.bind("ESCAPE", function()
 	local current_submap = hl.get_current_submap()
@@ -115,6 +128,15 @@ hl.define_submap("resize", function()
 	hl.bind(mainMod .. " + L", hl.dsp.window.resize({ x = 10, y = 0, relative = true}, { repeating = true }))
 end)
 
+-- Hyprlauncher shortcut
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("hyprlauncher"))
+
+-- Hyprlock shortcut
+hl.bind(mainMod .. " + CONTROL + L", hl.dsp.exec_cmd("hyprlock --grace 10"))
+
+-- Hyprshutdown shortcut
+hl.bind(mainMod .. " + CONTROL + ESCAPE", hl.dsp.exec_cmd("hyprshutdown"))
+
 -----------------------
 ---- LOOK AND FEEL ----
 -----------------------
@@ -131,7 +153,7 @@ hl.config({
 		rounding_power = 2,
 
 		active_opacity = 1.0,
-		inactive_opacity = 0.9,
+		inactive_opacity = 0.95,
 
 		shadow = {
 			enabled = true,
@@ -150,5 +172,12 @@ hl.config({
 	animations = {
 		enabled = true,
 	},
+	input = {
+		sensitivity = -0.3,
+	},
+	misc = {
+		disable_hyprland_logo = true,
+		disable_splash_rendering = true,
+	}
 })
 
