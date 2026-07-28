@@ -53,26 +53,28 @@ hl.env("HYPRCURSOR_SIZE", "24")
 ---- MONITORS ----
 ------------------
 
-hl.monitor({
-	output   = "eDP-1",
-	mode     = "preferred",
-	position = "0x0",
-	scale    = "1.0",
-})
-
+-- Old Book monitor
 -- hl.monitor({
--- 	output   = "dp-2",
+-- 	output   = "eDP-1",
 -- 	mode     = "preferred",
 -- 	position = "0x0",
--- 	scale    = "auto",
+-- 	scale    = "1.0",
 -- })
---
--- hl.monitor({
--- 	output   = "hdmi-a-1",
--- 	mode     = "preferred",
--- 	position = "auto-center-right",
--- 	scale    = "auto",
--- })
+
+hl.monitor({
+	output   = "DP-1",
+	mode     = "preferred",
+	position = "0x0",
+	scale    = "auto",
+})
+
+hl.monitor({
+	output   = "HDMI-A-1",
+	mode     = "preferred",
+	position = "auto-center-left",
+	transform = 1,
+	scale    = "auto",
+})
 
 --------------------------
 ---- WORKSPACE CONFIG ----
