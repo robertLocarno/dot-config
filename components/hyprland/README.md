@@ -3,8 +3,7 @@
 Symlink `./hypr/` to `~/.config/hypr/`
 
 Install the following plugins:
-- hyprpaper: `pacman -S hyprpaper`
-- hyprlauncher: `pacman -S hyprlauncher`
+- Noctalia
 - hyprlock: `pacman -S hyprlock`
 - hyprsysteminfo: `pacman -S hyprsysteminfo`
 - hyprpolkitagent: `pacman -S hyprpolkitagent`
