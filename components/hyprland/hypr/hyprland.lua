@@ -17,7 +17,11 @@ hl.on("hyprland.start", function()
 	-- enable clipse for copy / paste
 	hl.exec_cmd("clipse -listen")
 	-- Start wallpaper engine
-	hl.exec_cmd("hyprpaper")
+	--   NOTE: Commented out to let noctalia manage wallpaper
+	-- hl.exec_cmd("hyprpaper")
+
+	-- Start the status bar
+	hl.exec_cmd("noctalia")
 end)
 
 -- Notify config was reloaded
@@ -41,29 +45,51 @@ hl.bind(
 	)
 )
 
+-- Hyprcursor
+hl.env("HYPRCURSOR_THEME", "rose-pine-hyprcursor")
+hl.env("HYPRCURSOR_SIZE", "24")
+
 ------------------
 ---- MONITORS ----
 ------------------
 
 hl.monitor({
-	output   = "dp-2",
+	output   = "eDP-1",
 	mode     = "preferred",
 	position = "0x0",
-	scale    = "auto",
+	scale    = "1.0",
 })
 
-hl.monitor({
-	output   = "hdmi-a-1",
-	mode     = "preferred",
-	position = "auto-center-right",
-	scale    = "auto",
-})
+-- hl.monitor({
+-- 	output   = "dp-2",
+-- 	mode     = "preferred",
+-- 	position = "0x0",
+-- 	scale    = "auto",
+-- })
+--
+-- hl.monitor({
+-- 	output   = "hdmi-a-1",
+-- 	mode     = "preferred",
+-- 	position = "auto-center-right",
+-- 	scale    = "auto",
+-- })
+
+--------------------------
+---- WORKSPACE CONFIG ----
+--------------------------
+
+hl.workspace_rule({ workspace = "1", persistent = true })
+hl.workspace_rule({ workspace = "2", persistent = true })
+hl.workspace_rule({ workspace = "3", persistent = true })
+hl.workspace_rule({ workspace = "4", persistent = true })
+hl.workspace_rule({ workspace = "5", persistent = true })
 
 ---------------------
 ---- MY PROGRAMS ----
 ---------------------
 
 local terminal = "kitty"
+local ipc = "noctalia msg "
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -129,7 +155,20 @@ hl.define_submap("resize", function()
 end)
 
 -- Hyprlauncher shortcut
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("hyprlauncher"))
+--   Commented out to let noctalia handle this
+-- hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("hyprlauncher"))
+
+-- Noctalia shortcuts
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. "settings-toggle"))
+
+-- Media keys
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
 
 -- Hyprlock shortcut
 hl.bind(mainMod .. " + CONTROL + L", hl.dsp.exec_cmd("hyprlock --grace 10"))
@@ -138,11 +177,34 @@ hl.bind(mainMod .. " + CONTROL + L", hl.dsp.exec_cmd("hyprlock --grace 10"))
 hl.bind(mainMod .. " + CONTROL + ESCAPE", hl.dsp.exec_cmd("hyprshutdown"))
 
 -----------------------
+---- PROGRAM RULES ----
+-----------------------
+
+hl.window_rule({
+    match = { class = "dev.noctalia.Noctalia" },
+    float = true,
+    size = { 1080, 920 },
+})
+
+hl.layer_rule({
+  name = "noctalia",
+  match = {
+    namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd)$",
+  },
+  no_anim = true,
+  ignore_alpha = 0.5,
+  blur = true,
+  blur_popups = true,
+})
+
+-----------------------
 ---- LOOK AND FEEL ----
 -----------------------
 
 hl.config({
 	general = {
+		gaps_in = 5,
+		gaps_out = 10,
 		resize_on_border = true,
 		allow_tearing = false,
 		layout = "dwindle",
