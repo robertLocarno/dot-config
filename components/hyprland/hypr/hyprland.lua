@@ -147,6 +147,19 @@ hl.define_submap("resize", function()
 	hl.bind(mainMod .. " + L", hl.dsp.window.resize({ x = 10, y = 0, relative = true}), { repeating = true })
 end)
 
+-- Fullscreen submap
+hl.bind(mainMod .. " + SHIFT + F", function()
+	hl.dispatch(hl.dsp.window.fullscreen({
+		mode = "fullscreen",
+		action = "toggle"
+	}))
+
+	hl.notification.create({
+		text = "Fullscreen",
+		timeout = 1000,
+	})
+end)
+
 hl.on("config.reloaded", function()
 	hl.notification.create({
 		text = "Config Reloaded",
