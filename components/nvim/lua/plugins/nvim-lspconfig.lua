@@ -14,6 +14,16 @@ return {
 			map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
 			map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
 			map("n", "<leader>ca", vim.lsp.buf.code_action, opts "Perform Code Action")
+
+			map("n", "<leader>lr", function()
+				local clients = vim.lsp.get_clients({ bufnr = bufnr })
+				for _, client in ipairs(clients) do
+					vim.lsp.stop_client(client.id, true)
+				end
+				vim.defer_fn(function()
+					vim.cmd("edit")
+				end, 500)
+			end, opts "Restart LSP client")
 		end
 
 		M.capabilities = vim.lsp.protocol.make_client_capabilities()

@@ -2,6 +2,8 @@
 ### VARIABLES ###
 #################
 
+export PATH="$HOME/.local/bin:$PATH"
+
 export EDITOR='nvim'
 export VISUAL='nvim'
 
@@ -21,6 +23,9 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(
 	git
 )
+
+# Aliases
+alias t-monitor="tmux source-file ~/.config/tmux/monitor.conf \; attach -t monitor"
 
 #############
 ### SETUP ###

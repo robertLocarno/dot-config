@@ -25,12 +25,12 @@ return {
 					mappings = {
 						i = {
 							["<M-c>"] = actions.delete_buffer + actions.move_to_top,
-							["<Tab>"] = actions.move_selection_next,
-							["<S-Tab>"] = actions.move_selection_previous,
+							["<S-Tab>"] = actions.move_selection_next,
+							["<Tab>"] = actions.move_selection_previous,
 						},
 						n = {
-							["<Tab>"] = actions.move_selection_next,
-							["<S-Tab>"] = actions.move_selection_previous,
+							["<S-Tab>"] = actions.move_selection_next,
+							["<Tab>"] = actions.move_selection_previous,
 						},
 					},
 				},

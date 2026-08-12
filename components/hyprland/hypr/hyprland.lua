@@ -2,6 +2,9 @@
 ---- BASIC CONFIG ----
 ----------------------
 
+-- Noctalia Qt Application setup (make sure qt6ct is installed via paru)
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+
 -- Nvidia specific setup, taken from the wiki
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
@@ -66,21 +69,33 @@ hl.monitor({
 
 hl.monitor({
 	output   = "HDMI-A-1",
+	disabled = false,
 	mode     = "preferred",
 	position = "auto-center-left",
 	transform = 1,
 	scale    = "auto",
 })
 
---------------------------
----- WORKSPACE CONFIG ----
---------------------------
+-----------------------------------
+---- WORKSPACE & WINDOW CONFIG ----
+-----------------------------------
 
 hl.workspace_rule({ workspace = "1", monitor = "DP-1", persistent = true })
 hl.workspace_rule({ workspace = "2", monitor = "HDMI-A-1", persistent = true })
 hl.workspace_rule({ workspace = "3", monitor = "DP-1", persistent = true })
 hl.workspace_rule({ workspace = "4", monitor = "DP-1", persistent = true })
 hl.workspace_rule({ workspace = "5", monitor = "DP-1", persistent = true })
+
+-- hl.window_rule({
+-- 	name = "fullscreen-steam",
+-- 	match = {
+-- 		class = "^steam_app_.+$",
+-- 	},
+-- 	border_size = 0,
+-- 	fullscreen = true,
+-- 	monitor = "1",
+-- 	workspace = "10",
+-- })
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -145,6 +160,11 @@ hl.define_submap("resize", function()
 	hl.bind(mainMod .. " + K", hl.dsp.window.resize({ x = 0, y = -10, relative = true}), { repeating = true })
 	hl.bind(mainMod .. " + H", hl.dsp.window.resize({ x = -10, y = 0, relative = true}), { repeating = true })
 	hl.bind(mainMod .. " + L", hl.dsp.window.resize({ x = 10, y = 0, relative = true}), { repeating = true })
+
+	hl.bind("J", hl.dsp.window.move({ x = 0, y = 10, relative = true}), { repeating = true })
+	hl.bind("K", hl.dsp.window.move({ x = 0, y = -10, relative = true}), { repeating = true })
+	hl.bind("H", hl.dsp.window.move({ x = -10, y = 0, relative = true}), { repeating = true })
+	hl.bind("L", hl.dsp.window.move({ x = 10, y = 0, relative = true}), { repeating = true })
 end)
 
 -- Fullscreen submap
@@ -160,12 +180,14 @@ hl.bind(mainMod .. " + SHIFT + F", function()
 	})
 end)
 
+-- Hot reloads
 hl.on("config.reloaded", function()
 	hl.notification.create({
 		text = "Config Reloaded",
 		timeout = 1000,
 	})
 end)
+
 -- Noctalia shortcuts
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
 -- hl.bind(mainMod .. " + SPACE", function()
@@ -181,11 +203,14 @@ hl.bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
 
--- Hyprlock shortcut
-hl.bind(mainMod .. " + CONTROL + L", hl.dsp.exec_cmd("hyprlock --grace 10"))
-
 -- Hyprshutdown shortcut
 hl.bind(mainMod .. " + CONTROL + ESCAPE", hl.dsp.exec_cmd("hyprshutdown"))
+
+-- Special workspace stuff
+local hiddenName = "hidden"
+
+hl.bind(mainMod .. " + MINUS", hl.dsp.window.move({ workspace = "special:" .. hiddenName, follow = false }))
+hl.bind(mainMod .. " + EQUAL", hl.dsp.workspace.toggle_special(hiddenName))
 
 -----------------------
 ---- PROGRAM RULES ----
@@ -254,3 +279,6 @@ hl.config({
 	}
 })
 
+
+-- For Noctalia Color templates
+require("noctalia").apply_theme()
